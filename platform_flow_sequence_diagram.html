@@ -1,0 +1,379 @@
+
+<style>
+*{box-sizing:border-box;}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+.wrap{padding:0.5rem 0;}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.fbtn{font-size:11.5px;padding:4px 10px;border-radius:999px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:background .15s,color .15s;}
+.fbtn.active{background:var(--color-text-primary);color:var(--color-background-primary);}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;align-items:center;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--color-text-secondary);}
+.ls{width:28px;height:3px;border-radius:2px;}
+.ls-free{background:#1D9E75;}
+.ls-lock{background:#E24B4A;border-top:2px dashed #E24B4A;background:none;}
+.ls-chat{background:#7F77DD;}
+.ls-match{background:#EF9F27;}
+.platform-row{display:flex;align-items:center;margin-bottom:10px;gap:0;}
+.pname{width:110px;font-size:12px;font-weight:500;color:var(--color-text-primary);flex-shrink:0;line-height:1.3;}
+.pcat{font-size:10px;color:var(--color-text-secondary);font-weight:400;}
+.track{flex:1;position:relative;height:32px;display:flex;align-items:center;}
+.step-node{height:26px;display:flex;align-items:center;justify-content:center;font-size:10.5px;border-radius:4px;white-space:nowrap;padding:0 8px;position:relative;z-index:2;}
+.step-free{background:#E1F5EE;color:#085041;border:0.5px solid #5DCAA5;}
+.step-lock{background:#FCEBEB;color:#791F1F;border:0.5px solid #F09595;border-style:dashed;}
+.step-na{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary);}
+.step-chat{background:#EEEDFE;color:#26215C;border:0.5px solid #AFA9EC;}
+.step-match{background:#FAEEDA;color:#412402;border:0.5px solid #FAC775;}
+.step-partial{background:#FFF8EE;color:#633806;border:0.5px dashed #EF9F27;}
+.connector{height:2px;flex:1;min-width:6px;position:relative;z-index:1;}
+.conn-free{background:#9FE1CB;}
+.conn-block{background:repeating-linear-gradient(90deg,#F09595 0,#F09595 4px,transparent 4px,transparent 8px);}
+.conn-na{background:var(--color-border-tertiary);}
+.section-header{font-size:11px;font-weight:500;color:var(--color-text-secondary);padding:8px 0 4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:8px;margin-top:12px;}
+.col-labels{display:flex;margin-bottom:4px;margin-left:110px;}
+.col-label{font-size:10.5px;color:var(--color-text-tertiary);text-align:center;}
+.hidden{display:none;}
+</style>
+<h2 class="sr-only">플랫폼별 고객 flow 순서도: 위치 입력부터 채팅까지 단계 순서와 로그인 장벽 위치 비교</h2>
+<div class="wrap">
+
+<div class="filters" id="filter-bar">
+  <button class="fbtn active" data-cat="all">전체</button>
+  <button class="fbtn" data-cat="홈서비스">홈서비스</button>
+  <button class="fbtn" data-cat="교육">교육/튜터링</button>
+  <button class="fbtn" data-cat="돌봄">돌봄</button>
+  <button class="fbtn" data-cat="뷰티">뷰티/웰니스</button>
+  <button class="fbtn" data-cat="헬스케어">헬스케어</button>
+  <button class="fbtn" data-cat="법률">법률</button>
+  <button class="fbtn" data-cat="로컬">로컬/광고</button>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="ls ls-free"></div>로그인 없이 가능</div>
+  <div class="leg"><div style="width:28px;height:2px;border-top:2px dashed #E24B4A;"></div>로그인 장벽</div>
+  <div class="leg"><div class="ls ls-match" style="height:3px;"></div>매칭/신청서</div>
+  <div class="leg"><div class="ls ls-chat" style="height:3px;"></div>채팅</div>
+</div>
+
+<div class="col-labels">
+  <div class="col-label" style="width:72px;">위치 입력</div>
+  <div class="col-label" style="width:8px;"></div>
+  <div class="col-label" style="width:72px;">리스트 탐색</div>
+  <div class="col-label" style="width:8px;"></div>
+  <div class="col-label" style="width:72px;">로그인</div>
+  <div class="col-label" style="width:8px;"></div>
+  <div class="col-label" style="width:72px;">신청/매칭</div>
+  <div class="col-label" style="width:8px;"></div>
+  <div class="col-label" style="width:72px;">채팅/예약</div>
+</div>
+
+<div id="platform-list">
+
+<div class="section-header">홈서비스</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">Thumbtack<br><span class="pcat">홈서비스</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">신청서 작성</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-match" style="width:72px;">Pro 리스트</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">인앱 채팅</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">TaskRabbit<br><span class="pcat">홈서비스</span></div>
+  <div class="track">
+    <div class="step-node step-lock" style="width:72px;">로그인 필수</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">주소 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">Tasker 리스트</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">직접 선택</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">인앱 채팅</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">Bark<br><span class="pcat">홈서비스</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">신청서 작성</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-match" style="width:72px;">Pro가 연락</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">플랫폼 메시지</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">Angi<br><span class="pcat">홈서비스</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리스트 탐색</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">연락 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-match" style="width:72px;">견적 요청</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">메시지</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">Yelp<br><span class="pcat">로컬/광고</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리스트/지도뷰</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리뷰 확인</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">연락 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">메시지/전화</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="홈서비스">
+  <div class="pname">Houzz<br><span class="pcat">인테리어</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">포트폴리오 탐색</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">메시지 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">직접 연락</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">인앱 메시지</div>
+  </div>
+</div>
+
+<div class="section-header" data-cat-header="교육">교육/튜터링</div>
+
+<div class="platform-row" data-cat="교육">
+  <div class="pname">Wyzant<br><span class="pcat">교육</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">튜터 리스트</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">연락 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">직접 선택</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">인앱 채팅</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="교육">
+  <div class="pname">Varsity Tutors<br><span class="pcat">교육</span></div>
+  <div class="track">
+    <div class="step-node step-lock" style="width:72px;">로그인 필수</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">조건 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">리스트 없음</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-match" style="width:72px;">자동 매칭</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">수업 내 채팅</div>
+  </div>
+</div>
+
+<div class="section-header">돌봄</div>
+
+<div class="platform-row" data-cat="돌봄">
+  <div class="pname">Care.com<br><span class="pcat">돌봄</span></div>
+  <div class="track">
+    <div class="step-node step-lock" style="width:72px;">로그인 필수</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">돌보미 리스트</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">직접 선택</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">인앱 메시지</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="돌봄">
+  <div class="pname">Sittercity<br><span class="pcat">돌봄</span></div>
+  <div class="track">
+    <div class="step-node step-lock" style="width:72px;">로그인 필수</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">ZIP 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">리스트(구독)</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">직접 선택</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">구독 시 메시지</div>
+  </div>
+</div>
+
+<div class="section-header">뷰티/웰니스</div>
+
+<div class="platform-row" data-cat="뷰티">
+  <div class="pname">Vagaro<br><span class="pcat">뷰티/웰니스</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리스트/지도뷰</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">업체 프로필</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">온라인 예약</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">유료 채팅</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="뷰티">
+  <div class="pname">Styleseat<br><span class="pcat">뷰티</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리스트/포트폴리오</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">프로필 확인</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">예약 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">채팅 없음</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="뷰티">
+  <div class="pname">Booksy<br><span class="pcat">뷰티/헬스</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리스트/지도뷰</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">업체 프로필</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">온라인 예약</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">예약 후 메시지</div>
+  </div>
+</div>
+
+<div class="section-header">헬스케어</div>
+
+<div class="platform-row" data-cat="헬스케어">
+  <div class="pname">Zocdoc<br><span class="pcat">헬스케어</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">보험/위치 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">의사 리스트</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">예약 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">시간 선택 예약</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">채팅 없음</div>
+  </div>
+</div>
+
+<div class="section-header">법률</div>
+
+<div class="platform-row" data-cat="법률">
+  <div class="pname">LegalMatch<br><span class="pcat">법률</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">사건 유형 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">사건 상세 작성</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-match" style="width:72px;">변호사가 연락</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">플랫폼 메시지</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="법률">
+  <div class="pname">Avvo<br><span class="pcat">법률</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">위치/분야 입력</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">변호사 리스트</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">프로필/리뷰</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">연락 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-partial" style="width:72px;">Q&A/유료상담</div>
+  </div>
+</div>
+
+<div class="section-header">로컬/광고</div>
+
+<div class="platform-row" data-cat="로컬">
+  <div class="pname">Google LSA<br><span class="pcat">광고</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">구글 검색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">광고 카드 노출</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">로그인 없음</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">직접 클릭</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-na" style="width:72px;">전화/외부 연락</div>
+  </div>
+</div>
+
+<div class="platform-row" data-cat="로컬">
+  <div class="pname">Facebook BP<br><span class="pcat">소셜</span></div>
+  <div class="track">
+    <div class="step-node step-free" style="width:72px;">검색/피드 발견</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">페이지 탐색</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-free" style="width:72px;">리뷰/게시물</div>
+    <div class="connector conn-block" style="width:8px;"></div>
+    <div class="step-node step-lock" style="width:72px;">메시지 시 로그인</div>
+    <div class="connector conn-free" style="width:8px;"></div>
+    <div class="step-node step-chat" style="width:72px;">Messenger</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+const btns = document.querySelectorAll('.fbtn');
+const rows = document.querySelectorAll('.platform-row');
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    rows.forEach(row => {
+      if (cat === 'all' || row.dataset.cat === cat) {
+        row.classList.remove('hidden');
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+    document.querySelectorAll('.section-header').forEach(h => {
+      const next = h.nextElementSibling;
+      h.style.display = (cat === 'all' || (next && !next.classList.contains('hidden'))) ? '' : 'none';
+    });
+  });
+});
+</script>
